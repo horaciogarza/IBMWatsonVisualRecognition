@@ -13,6 +13,9 @@ import Foundation
 
 class ViewController: UIViewController {
 
+    
+    @IBOutlet var textView: UITextView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -38,15 +41,30 @@ class ViewController: UIViewController {
 //        visualRecognition.classify(image: url, success: success)
         
         
-        let failure = { (error: Error) in print(error) }
+        /*let failure = { (error: Error) in print(error) }
         
         visualRecognition.classify(image: url, failure: failure) { classifiedImages in
             print(classifiedImages)
             
+        }*/
+        var results : String = "Resultados de la imagen\n\n"
+        
+        visualRecognition.classify(image: url) { [unowned self] (classifiedImages) in
+            
+            /*for classification in classifiedImages.images{
+                print(classification.classifiers)
+            }*/
+            
+            for classification in classifiedImages.images[0].classifiers[0].classes{
+                results = results + "Clasificacion: \(classification.classification) \n Probabilidad: \(classification.score) \n\n"
+            }
+            
+            //lo cambias al main para que se pueda mostrar, si no truena.
+            DispatchQueue.main.async {
+                self.textView.text = results
+            }
+            
         }
-        
-        
-        
         
         
         
